@@ -52,12 +52,10 @@ struct Fq12Sparse01234 {
 }
 
 impl Fq12Sparse01234PartialEq of PartialEq<Fq12Sparse01234> {
-    #[inline(always)]
     fn eq(lhs: @Fq12Sparse01234, rhs: @Fq12Sparse01234) -> bool {
         lhs.c0 == rhs.c0 && lhs.c1.c0 == rhs.c1.c0 && lhs.c1.c1 == rhs.c1.c1
     }
 
-    #[inline(always)]
     fn ne(lhs: @Fq12Sparse01234, rhs: @Fq12Sparse01234) -> bool {
         !Fq12Sparse01234PartialEq::eq(lhs, rhs)
     }
@@ -78,7 +76,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq6 with a sparse Fq6 01 derived from a sparse 034 Fq12
     // Same as Fq6 u_mul but with b2 as zero (and associated ops removed)
-    #[inline(always)]
     fn mul_01(self: Fq6, rhs: Fq6Sparse01, field_nz: NonZero<u256>) -> Fq6 {
         core::internal::revoke_ap_tracking();
         // Input:a = (a0 + a1v + a2v2) and b = (b0 + b1v) ∈ Fp6
@@ -110,7 +107,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq6 with a sparse Fq6 01 derived from a sparse 034 Fq12
     // Same as Fq6 u_mul but with b2 as zero (and associated ops removed)
-    #[inline(always)]
     fn u_mul_01(self: Fq6, rhs: Fq6Sparse01, field_nz: NonZero<u256>) -> SixU512 {
         core::internal::revoke_ap_tracking();
         // Input:a = (a0 + a1v + a2v2) and b = (b0 + b1v) ∈ Fp6
@@ -142,7 +138,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq6 with a sparse Fq6 01 derived from a sparse 034 Fq12
     // Same as Fq6 u_mul but with a2 and b2 as zero (and associated ops removed)
-    #[inline(always)]
     fn u_mul_01_by_01(self: Fq6Sparse01, rhs: Fq6Sparse01, field_nz: NonZero<u256>) -> SixU512 {
         // Input:a = (a0 + a1v) and b = (b0 + b1v) ∈ Fp6
         // Output:c = a · b = (c0 + c1v + c2v2) ∈ Fp6
@@ -171,7 +166,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq6 with a sparse Fq6 01 derived from a sparse 034 Fq12
     // Same as Fq6 u_mul but with a2 and b2 as zero (and associated ops removed)
-    #[inline(always)]
     fn mul_01_by_01(self: Fq6Sparse01, rhs: Fq6Sparse01, field_nz: NonZero<u256>) -> Fq6 {
         // Input:a = (a0 + a1v) and b = (b0 + b1v) ∈ Fp6
         // Output:c = a · b = (c0 + c1v + c2v2) ∈ Fp6
@@ -204,7 +198,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul a sparse 034 Fq12 by another 034 Fq12 resulting in a sparse 01234
     // https://github.com/Consensys/gnark/blob/v0.9.1/std/algebra/emulated/fields_bn254/e12_pairing.go#L150
-    #[inline(always)]
     fn mul_034_by_034(
         self: Fq12Sparse034, rhs: Fq12Sparse034, field_nz: NonZero<u256>
     ) -> Fq12Sparse01234 {
@@ -242,7 +235,6 @@ impl FqSparse of FqSparseTrait {
     }
     // Mul a sparse 034 Fq12 by another 034 Fq12 resulting in a sparse 01234
     // https://github.com/Consensys/gnark/blob/v0.9.1/std/algebra/emulated/fields_bn254/e12_pairing.go#L150
-    #[inline(always)]
     fn sqr_034(self: Fq12Sparse034, field_nz: NonZero<u256>) -> Fq12Sparse01234 {
         let Fq12Sparse034 { c3: c3, c4: c4 } = self;
         // x3 = c3 * c3
@@ -278,7 +270,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq12 with a sparse 034 Fq12
     // https://github.com/Consensys/gnark/blob/v0.9.1/std/algebra/emulated/fields_bn254/e12_pairing.go#L116
-    #[inline(always)]
     fn mul_034(self: Fq12, rhs: Fq12Sparse034, field_nz: NonZero<u256>) -> Fq12 {
         let Fq12 { c0: a0, c1: a1 } = self;
         let Fq12Sparse034 { mut c3, c4 } = rhs;
@@ -311,7 +302,6 @@ impl FqSparse of FqSparseTrait {
     // Mul sparse 01234 Fq12 with a sparse 034 Fq12
     // Same as Fq12 mul 034 but with a sparse b1 i.e. b1.c2 as 0 and associated ops removed
     // https://github.com/Consensys/gnark/blob/v0.9.1/std/algebra/emulated/fields_bn254/e12_pairing.go#L208
-    #[inline(always)]
     fn mul_01234_034(self: Fq12Sparse01234, rhs: Fq12Sparse034, field_nz: NonZero<u256>) -> Fq12 {
         let Fq12Sparse01234 { c0: a0, c1: a1 } = self;
 
@@ -346,7 +336,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq12 with a sparse 01234 Fq12
     // Same as Fq12 mul but with a sparse b1 i.e. b1.c2 as 0 and associated ops removed
-    #[inline(always)]
     fn mul_01234(self: Fq12, rhs: Fq12Sparse01234, field_nz: NonZero<u256>) -> Fq12 {
         let Fq12 { c0: a0, c1: a1 } = self;
         let Fq12Sparse01234 { c0: b0, c1: b1 } = rhs;
@@ -366,7 +355,6 @@ impl FqSparse of FqSparseTrait {
 
     // Mul Fq12 with a sparse 01234 Fq12
     // Same as Fq12 mul but with a sparse b1 i.e. b1.c2 as 0 and associated ops removed
-    #[inline(always)]
     fn mul_01234_01234(
         self: Fq12Sparse01234, rhs: Fq12Sparse01234, field_nz: NonZero<u256>
     ) -> Fq12 {

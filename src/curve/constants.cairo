@@ -7,7 +7,6 @@ const ORDER: u256 = 218882428718392752222464057452572750885483644004160343436982
 const FIELD: u256 = 0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47;
 const FIELD_NZ: NonZero<u256> = 0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47;
 
-#[inline(always)]
 fn get_field_nz() -> NonZero<u256> {
     // 0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47
     FIELD_NZ
@@ -29,7 +28,6 @@ const B: u256 = 3;
 const ATE_LOOP_COUNT: u128 = 29793968203157093288;
 const LOG_ATE_LOOP_COUNT: u128 = 63;
 
-#[inline(always)]
 fn t_naf() -> Array<(bool, bool)> {
     // https://codegolf.stackexchange.com/questions/235319/convert-to-a-non-adjacent-form#answer-235327
     // JS function, f=n=>n?f(n+n%4n/3n>>1n)+'OPON'[n%4n]:''
@@ -110,7 +108,6 @@ fn t_naf() -> Array<(bool, bool)> {
 // NafBit = (bit, is_positive)
 type NafBit = (bool, bool);
 
-#[inline(always)]
 fn six_t_plus_2_naf_rev_first_part() -> (NafBit, NafBit, NafBit) {
     let P = (true, true);
     let O = (false, false);
@@ -118,7 +115,6 @@ fn six_t_plus_2_naf_rev_first_part() -> (NafBit, NafBit, NafBit) {
     (P, O, N)
 }
 
-#[inline(always)]
 fn six_t_plus_2_naf_rev_trimmed() -> Array<NafBit> {
     // sixuPlus2NAF is 6u+2 in non-adjacent form, reversed and first element removed.
     // NAF form,

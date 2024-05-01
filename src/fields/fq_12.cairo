@@ -21,7 +21,6 @@ struct Fq12 {
 
 type ui = u256;
 
-#[inline(always)]
 fn fq12(
     a0: ui, a1: ui, a2: ui, a3: ui, a4: ui, a5: ui, b0: ui, b1: ui, b2: ui, b3: ui, b4: ui, b5: ui
 ) -> Fq12 {
@@ -93,28 +92,23 @@ impl Fq12Frobenius of Fq12FrobeniusTrait {
 }
 
 impl Fq12Utils of FieldUtils<Fq12, Fq6> {
-    #[inline(always)]
     fn one() -> Fq12 {
         Fq12 { c0: FieldUtils::one(), c1: FieldUtils::zero(), }
     }
 
-    #[inline(always)]
     fn zero() -> Fq12 {
         Fq12 { c0: FieldUtils::zero(), c1: FieldUtils::zero(), }
     }
 
-    #[inline(always)]
     fn scale(self: Fq12, by: Fq6) -> Fq12 {
         assert(false, 'no_impl: fq12 scale');
         Fq12Utils::one()
     }
 
-    #[inline(always)]
     fn conjugate(self: Fq12) -> Fq12 {
         Fq12 { c0: self.c0, c1: -self.c1, }
     }
 
-    #[inline(always)]
     fn mul_by_nonresidue(self: Fq12,) -> Fq12 {
         assert(false, 'no_impl: fq12 non residue');
         Fq12Utils::one()
@@ -153,12 +147,10 @@ impl Fq12Utils of FieldUtils<Fq12, Fq6> {
 type Fq6U512 = ((u512, u512), (u512, u512), (u512, u512));
 
 impl Fq12Ops of FieldOps<Fq12> {
-    #[inline(always)]
     fn add(self: Fq12, rhs: Fq12) -> Fq12 {
         Fq12 { c0: self.c0 + rhs.c0, c1: self.c1 + rhs.c1, }
     }
 
-    #[inline(always)]
     fn sub(self: Fq12, rhs: Fq12) -> Fq12 {
         Fq12 { c0: self.c0 - rhs.c0, c1: self.c1 - rhs.c1, }
     }

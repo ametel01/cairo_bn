@@ -11,14 +11,12 @@ struct u256X2 {
 }
 
 impl U512Intou256X2 of Into<u512, u256X2> {
-    #[inline(always)]
     fn into(self: u512) -> u256X2 {
         let u512 { limb0: low, limb1: high, limb2, limb3 } = self;
         u256X2 { low: u256 { low, high }, high: u256 { low: limb2, high: limb3 } }
     }
 }
 
-#[inline(always)]
 fn u512_add(lhs: u512, rhs: u512) -> u512 {
     let lhs: u256X2 = lhs.into();
     let rhs: u256X2 = rhs.into();
@@ -47,7 +45,6 @@ fn u512_add(lhs: u512, rhs: u512) -> u512 {
     }
 }
 
-#[inline(always)]
 fn u512_add_overflow(lhs: u512, rhs: u512) -> (u512, bool) {
     let lhs: u256X2 = lhs.into();
     let rhs: u256X2 = rhs.into();
@@ -77,7 +74,6 @@ fn u512_add_overflow(lhs: u512, rhs: u512) -> (u512, bool) {
     }
 }
 
-#[inline(always)]
 fn u512_sub(lhs: u512, rhs: u512) -> u512 {
     let lhs: u256X2 = lhs.into();
     let rhs: u256X2 = rhs.into();
@@ -106,7 +102,6 @@ fn u512_sub(lhs: u512, rhs: u512) -> u512 {
     }
 }
 
-#[inline(always)]
 fn u512_add_u256(lhs: u512, rhs: u256) -> u512 {
     let u256X2 { high, low }: u256X2 = lhs.into();
     let u256 { high: limb3, low: limb2 } = high;
@@ -130,7 +125,6 @@ fn u512_add_u256(lhs: u512, rhs: u256) -> u512 {
     }
 }
 
-#[inline(always)]
 fn u512_sub_u256(lhs: u512, rhs: u256) -> u512 {
     let u256X2 { high, low }: u256X2 = lhs.into();
     let u256 { high: limb3, low: limb2 } = high;
@@ -154,7 +148,6 @@ fn u512_sub_u256(lhs: u512, rhs: u256) -> u512 {
     }
 }
 
-#[inline(always)]
 fn u512_sub_overflow(lhs: u512, rhs: u512) -> (u512, bool) {
     let lhs: u256X2 = lhs.into();
     let rhs: u256X2 = rhs.into();
@@ -187,7 +180,6 @@ fn u512_sub_overflow(lhs: u512, rhs: u512) -> (u512, bool) {
 
 // add a u256 to high limbs of u512
 // this beautiful beautiful function converts a `-x mod 2**512` to `x mod rhs`
-#[inline(always)]
 fn u512_high_add(lhs: u512, rhs: u256) -> Result<u512, u512> {
     let u512 { limb0, limb1, limb2: low, limb3: high } = lhs;
     let lhs = u256 { low, high };
@@ -199,7 +191,6 @@ fn u512_high_add(lhs: u512, rhs: u256) -> Result<u512, u512> {
 
 // subtracts u256 from high limbs of u512
 // this beautiful beautiful function can convert an overflown `2**512 + x mod rhs` to equivalent `y mod rhs`
-#[inline(always)]
 fn u512_high_sub(lhs: u512, rhs: u256) -> Result<u512, u512> {
     let u512 { limb0, limb1, limb2: low, limb3: high } = lhs;
     let lhs = u256 { low, high };
@@ -209,7 +200,6 @@ fn u512_high_sub(lhs: u512, rhs: u256) -> Result<u512, u512> {
     }
 }
 
-#[inline(always)]
 fn u512_reduce(a: u512, modulo: NonZero<u256>) -> u256 {
     let (_, rem_u256, _, _, _, _, _) = integer::u512_safe_divmod_by_u256(a, modulo);
     rem_u256
