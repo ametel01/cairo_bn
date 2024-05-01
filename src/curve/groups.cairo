@@ -40,26 +40,22 @@ impl AffinePartialEq<T, +PartialEq<T>> of PartialEq<Affine<T>> {
 impl AffineOps<
     T, +FOps<T>, +FShort<T>, +Copy<T>, +Print<T>, +Drop<T>, impl ECGImpl: ECGroup<T>
 > of ECOperations<T> {
-    #[inline(always)]
     fn x_on_slope(self: @Affine<T>, slope: T, x2: T) -> T {
         // x = λ^2 - x1 - x2
         slope.sqr() - *self.x - x2
     }
 
-    #[inline(always)]
     fn y_on_slope(self: @Affine<T>, slope: T, x: T) -> T {
         // y = λ(x1 - x) - y1
         slope * (*self.x - x) - *self.y
     }
 
-    #[inline(always)]
     fn pt_on_slope(self: @Affine<T>, slope: T, x2: T) -> Affine<T> {
         let x = self.x_on_slope(slope, x2);
         let y = self.y_on_slope(slope, x);
         Affine { x, y }
     }
 
-    #[inline(always)]
     fn chord(self: @Affine<T>, rhs: Affine<T>) -> T {
         let Affine { x: x1, y: y1 } = *self;
         let Affine { x: x2, y: y2 } = rhs;
@@ -67,12 +63,10 @@ impl AffineOps<
         (y2 - y1) / (x2 - x1)
     }
 
-    #[inline(always)]
     fn add(self: @Affine<T>, rhs: Affine<T>) -> Affine<T> {
         self.pt_on_slope(self.chord(rhs), rhs.x)
     }
 
-    #[inline(always)]
     fn tangent(self: @Affine<T>) -> T {
         let Affine { x, y } = *self;
 
@@ -83,7 +77,6 @@ impl AffineOps<
         (x_2 + x_2 + x_2) / y.u_add(y)
     }
 
-    #[inline(always)]
     fn double(self: @Affine<T>) -> Affine<T> {
         self.pt_on_slope(self.tangent(), *self.x)
     }
@@ -119,8 +112,6 @@ impl AffineOps<
         result
     }
 }
-
-#[inline(always)]
 fn g1(x: u256, y: u256) -> Affine<Fq> {
     Affine { x: fq(x), y: fq(y) }
 }
@@ -130,14 +121,12 @@ fn g2(x1: u256, x2: u256, y1: u256, y2: u256) -> Affine<Fq2> {
 }
 
 impl AffineG1Impl of ECGroup<Fq> {
-    #[inline(always)]
     fn one() -> Affine<Fq> {
         g1(1, 2)
     }
 }
 
 impl AffineG2Impl of ECGroup<Fq2> {
-    #[inline(always)]
     fn one() -> AffineG2 {
         g2(
             10857046999023057135944570762232829481370756359578518086990519993285655852781,

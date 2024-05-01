@@ -33,19 +33,16 @@ use m::{u512_add_u256, u512_sub_u256, u512_add_overflow, u512_sub_overflow, u512
 use m::{Tuple2Add, Tuple2Sub, Tuple3Add, Tuple3Sub};
 use f::{SixU512};
 
-#[inline(always)]
 fn u512_high_add(lhs: u512, rhs: u256) -> u512 {
     m::u512_high_add(lhs, rhs).expect('u512_high_add overflow')
 }
 
-#[inline(always)]
 fn u512_high_sub(lhs: u512, rhs: u256) -> u512 {
     m::u512_high_sub(lhs, rhs).expect('u512_high_sub overflow')
 }
 
 #[generate_trait]
 impl U512Fq2Ops of U512Fq2OpsTrait {
-    #[inline(always)]
     fn u_add(self: (u512, u512), rhs: (u512, u512)) -> (u512, u512) {
         let (L0, L1) = self;
         let (R0, R1) = rhs;
@@ -53,7 +50,7 @@ impl U512Fq2Ops of U512Fq2OpsTrait {
         (u512_add(L0, R0), u512_add(L1, R1))
     }
 
-    #[inline(always)]
+
     fn u_sub(self: (u512, u512), rhs: (u512, u512)) -> (u512, u512) {
         let (L0, L1) = self;
         let (R0, R1) = rhs;
@@ -64,7 +61,6 @@ impl U512Fq2Ops of U512Fq2OpsTrait {
 
 #[generate_trait]
 impl U512Fq6Ops of U512Fq6OpsTrait {
-    #[inline(always)]
     fn u_add(self: SixU512, rhs: SixU512) -> SixU512 {
         let (L0, L1, L2) = self;
         let (R0, R1, R2) = rhs;
@@ -72,7 +68,7 @@ impl U512Fq6Ops of U512Fq6OpsTrait {
         (L0.u_add(R0), L1.u_add(R1), L2.u_add(R2))
     }
 
-    #[inline(always)]
+
     fn u_sub(self: SixU512, rhs: SixU512) -> SixU512 {
         let (L0, L1, L2) = self;
         let (R0, R1, R2) = rhs;
@@ -84,7 +80,6 @@ impl U512Fq6Ops of U512Fq6OpsTrait {
 // This fixes mod breaking u128 overflow
 // Tell this guy what's safe to add or subtract
 // And it will proceed optimally avoiding overflow
-#[inline(always)]
 fn fix_overflow(result: u256, sub: u256, add: u256) -> u256 {
     match u128_overflowing_sub(sub.high, result.high) {
         // If sub >= result, then we add
@@ -97,7 +92,6 @@ fn fix_overflow(result: u256, sub: u256, add: u256) -> u256 {
 // This fixes mod breaking u128 overflow
 // Tell this guy what's safe to add or subtract
 // And it will proceed optimally avoiding overflow
-#[inline(always)]
 fn fix_overflow_u512(result: u512, sub: u256, add: u256) -> u512 {
     let u512 { limb0, limb1, limb2, limb3 } = result;
     let u512_high = u256 { low: limb2, high: limb3 };
@@ -105,7 +99,6 @@ fn fix_overflow_u512(result: u512, sub: u256, add: u256) -> u512 {
     u512 { limb0, limb1, limb2, limb3 }
 }
 
-#[inline(always)]
 fn add_u_wrapping(lhs: u256, rhs: u256) -> u256 {
     match m::u256_overflow_add(lhs, rhs) {
         Result::Ok(res) => res,
@@ -151,12 +144,10 @@ impl U512BnSub of Sub<u512> {
     }
 }
 
-#[inline(always)]
 fn u512_reduce_bn(a: u512) -> u256 {
     u512_reduce(a, get_field_nz())
 }
 
-#[inline(always)]
 fn u512_scl_9(a: u512, field_nz: NonZero<u256>) -> u512 {
     let u512 { limb0, limb1, limb2: low, limb3: high, } = a;
     let u256 { low: limb2, high: limb3 } = reduce(u256 { high, low }, field_nz);
@@ -183,7 +174,6 @@ fn mul_by_xi_nz(t: (u512, u512), field_nz: NonZero<u256>) -> (u512, u512) {
      t0 + u512_scl_9(t1, field_nz))
 }
 
-#[inline(always)]
 fn mul_by_v(
     t: ((u512, u512), (u512, u512), (u512, u512)),
 ) -> ((u512, u512), (u512, u512), (u512, u512)) {
@@ -192,7 +182,6 @@ fn mul_by_v(
     (mul_by_xi(t2), t0, t1,)
 }
 
-#[inline(always)]
 fn mul_by_v_nz(
     t: ((u512, u512), (u512, u512), (u512, u512)), field_nz: NonZero<u256>
 ) -> ((u512, u512), (u512, u512), (u512, u512)) {
@@ -201,42 +190,34 @@ fn mul_by_v_nz(
     (mul_by_xi_nz(t2, field_nz), t0, t1)
 }
 
-#[inline(always)]
 fn mul(a: u256, b: u256) -> u256 {
     m::mul_nz(a, b, get_field_nz())
 }
 
-#[inline(always)]
 fn scl(a: u256, b: u128) -> u256 {
     m::scl(a, b, get_field_nz())
 }
 
-#[inline(always)]
 fn neg(b: u256) -> u256 {
     m::neg(b, FIELD)
 }
 
-#[inline(always)]
 fn add(mut a: u256, mut b: u256) -> u256 {
     m::add(a, b, FIELD)
 }
 
-#[inline(always)]
 fn sqr(mut a: u256) -> u256 {
     m::sqr_nz(a, get_field_nz())
 }
 
-#[inline(always)]
 fn sub(mut a: u256, mut b: u256) -> u256 {
     m::sub(a, b, FIELD)
 }
 
-#[inline(always)]
 fn div(a: u256, b: u256) -> u256 {
     m::div_nz(a, b, get_field_nz())
 }
 
-#[inline(always)]
 fn inv(b: u256) -> u256 {
     m::inv(b, get_field_nz())
 }

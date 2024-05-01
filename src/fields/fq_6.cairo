@@ -20,14 +20,12 @@ struct Fq6 {
     c2: Fq2,
 }
 
-#[inline(always)]
 fn fq6(c0: u256, c1: u256, c2: u256, c3: u256, c4: u256, c5: u256) -> Fq6 {
     Fq6 { c0: fq2(c0, c1), c1: fq2(c2, c3), c2: fq2(c4, c5) }
 }
 
 #[generate_trait]
 impl Fq6Frobenius of Fq6FrobeniusTrait {
-    #[inline(always)]
     fn frob0(self: Fq6) -> Fq6 {
         let Fq6 { c0, c1, c2 } = self;
         Fq6 {
@@ -37,7 +35,7 @@ impl Fq6Frobenius of Fq6FrobeniusTrait {
         }
     }
 
-    #[inline(always)]
+
     fn frob1(self: Fq6) -> Fq6 {
         let Fq6 { c0, c1, c2 } = self;
         Fq6 {
@@ -47,7 +45,7 @@ impl Fq6Frobenius of Fq6FrobeniusTrait {
         }
     }
 
-    #[inline(always)]
+
     fn frob2(self: Fq6) -> Fq6 {
         let Fq6 { c0, c1, c2 } = self;
         Fq6 {
@@ -57,7 +55,7 @@ impl Fq6Frobenius of Fq6FrobeniusTrait {
         }
     }
 
-    #[inline(always)]
+
     fn frob3(self: Fq6) -> Fq6 {
         let Fq6 { c0, c1, c2 } = self;
         Fq6 {
@@ -67,7 +65,7 @@ impl Fq6Frobenius of Fq6FrobeniusTrait {
         }
     }
 
-    #[inline(always)]
+
     fn frob4(self: Fq6) -> Fq6 {
         let Fq6 { c0, c1, c2 } = self;
         Fq6 {
@@ -77,7 +75,7 @@ impl Fq6Frobenius of Fq6FrobeniusTrait {
         }
     }
 
-    #[inline(always)]
+
     fn frob5(self: Fq6) -> Fq6 {
         let Fq6 { c0, c1, c2 } = self;
         Fq6 {
@@ -89,34 +87,33 @@ impl Fq6Frobenius of Fq6FrobeniusTrait {
 }
 
 impl Fq6Utils of FieldUtils<Fq6, Fq2> {
-    #[inline(always)]
     fn one() -> Fq6 {
         fq6(1, 0, 0, 0, 0, 0)
     }
 
-    #[inline(always)]
+
     fn zero() -> Fq6 {
         fq6(0, 0, 0, 0, 0, 0)
     }
 
-    #[inline(always)]
+
     fn scale(self: Fq6, by: Fq2) -> Fq6 {
         Fq6 { c0: self.c0 * by, c1: self.c1 * by, c2: self.c2 * by, }
     }
 
-    #[inline(always)]
+
     fn conjugate(self: Fq6) -> Fq6 {
         assert(false, 'no_impl: fq6 conjugate');
         FieldUtils::zero()
     }
 
-    #[inline(always)]
+
     fn mul_by_nonresidue(self: Fq6,) -> Fq6 {
         // https://github.com/paritytech/bn/blob/master/src/fields/fq6.rs#L110
         Fq6 { c0: self.c2.mul_by_nonresidue(), c1: self.c0, c2: self.c1, }
     }
 
-    #[inline(always)]
+
     fn frobenius_map(self: Fq6, power: usize) -> Fq6 {
         let rem = power % 6;
         if rem == 0 {
@@ -136,7 +133,6 @@ impl Fq6Utils of FieldUtils<Fq6, Fq2> {
 }
 
 impl Fq6Short of FieldShortcuts<Fq6> {
-    #[inline(always)]
     fn u_add(self: Fq6, rhs: Fq6) -> Fq6 {
         // Operation without modding can only be done like 4 times
         Fq6 { //
@@ -145,7 +141,7 @@ impl Fq6Short of FieldShortcuts<Fq6> {
             c2: self.c2.u_add(rhs.c2), //
         }
     }
-    #[inline(always)]
+
     fn u_sub(self: Fq6, rhs: Fq6) -> Fq6 {
         // Operation without modding can only be done like 4 times
         Fq6 { //
@@ -154,7 +150,7 @@ impl Fq6Short of FieldShortcuts<Fq6> {
             c2: self.c2.u_sub(rhs.c2), //
         }
     }
-    #[inline(always)]
+
     fn fix_mod(self: Fq6) -> Fq6 {
         // Operation without modding can only be done like 4 times
         Fq6 { //
@@ -173,13 +169,12 @@ fn u512_dud() -> u512 {
 }
 
 impl Fq6MulShort of FieldMulShortcuts<Fq6, SixU512> {
-    #[inline(always)]
     fn u512_add_fq(self: SixU512, rhs: Fq6) -> SixU512 {
         let (C0, C1, C2) = self;
         (C0.u512_add_fq(rhs.c0), C1.u512_add_fq(rhs.c1), C2.u512_add_fq(rhs.c2))
     }
 
-    #[inline(always)]
+
     fn u512_sub_fq(self: SixU512, rhs: Fq6) -> SixU512 {
         let (C0, C1, C2) = self;
         (C0.u512_sub_fq(rhs.c0), C1.u512_sub_fq(rhs.c1), C2.u512_sub_fq(rhs.c2))
@@ -188,7 +183,7 @@ impl Fq6MulShort of FieldMulShortcuts<Fq6, SixU512> {
     // A reimplementation in Karatsuba multiplication with lazy reduction
     // Faster Explicit Formulas for Computing Pairings over Ordinary Curves
     // uppercase vars are u512, lower case are u256
-    #[inline(always)]
+
     fn u_mul(self: Fq6, rhs: Fq6) -> SixU512 {
         core::internal::revoke_ap_tracking();
         // Input:a = (a0 + a1v + a2v2) and b = (b0 + b1v + b2v2) ∈ Fp6
@@ -213,7 +208,7 @@ impl Fq6MulShort of FieldMulShortcuts<Fq6, SixU512> {
     // CH-SQR2 squaring adapted to lazy reduction as described in
     // Faster Explicit Formulas for Computing Pairings over Ordinary Curves
     // uppercase vars are u512, lower case are u256
-    #[inline(always)]
+
     fn u_sqr(self: Fq6) -> SixU512 {
         core::internal::revoke_ap_tracking();
         let Fq6 { c0, c1, c2 } = self;
@@ -244,7 +239,7 @@ impl Fq6MulShort of FieldMulShortcuts<Fq6, SixU512> {
         (C0, C1, C2)
     }
 
-    #[inline(always)]
+
     fn to_fq(self: SixU512, field_nz: NonZero<u256>) -> Fq6 {
         let (C0, C1, C2) = self;
         Fq6 { c0: C0.to_fq(field_nz), c1: C1.to_fq(field_nz), c2: C2.to_fq(field_nz) }
@@ -252,46 +247,45 @@ impl Fq6MulShort of FieldMulShortcuts<Fq6, SixU512> {
 }
 
 impl Fq6Ops of FieldOps<Fq6> {
-    #[inline(always)]
     fn add(self: Fq6, rhs: Fq6) -> Fq6 {
         Fq6 { c0: self.c0 + rhs.c0, c1: self.c1 + rhs.c1, c2: self.c2 + rhs.c2, }
     }
 
-    #[inline(always)]
+
     fn sub(self: Fq6, rhs: Fq6) -> Fq6 {
         Fq6 { c0: self.c0 - rhs.c0, c1: self.c1 - rhs.c1, c2: self.c2 - rhs.c2, }
     }
 
-    #[inline(always)]
+
     fn mul(self: Fq6, rhs: Fq6) -> Fq6 {
         let field_nz = FIELD.try_into().unwrap();
         self.u_mul(rhs).to_fq(field_nz)
     }
 
-    #[inline(always)]
+
     fn div(self: Fq6, rhs: Fq6) -> Fq6 {
         let field_nz = get_field_nz();
         self.u_mul(rhs.inv(field_nz)).to_fq(field_nz)
     }
 
-    #[inline(always)]
+
     fn neg(self: Fq6) -> Fq6 {
         Fq6 { c0: -self.c0, c1: -self.c1, c2: -self.c2, }
     }
 
-    #[inline(always)]
+
     fn eq(lhs: @Fq6, rhs: @Fq6) -> bool {
         lhs.c0 == rhs.c0 && lhs.c1 == rhs.c1 && lhs.c2 == rhs.c2
     }
 
-    #[inline(always)]
+
     fn sqr(self: Fq6) -> Fq6 {
         core::internal::revoke_ap_tracking();
         let field_nz = FIELD.try_into().unwrap();
         self.u_sqr().to_fq(field_nz)
     }
 
-    #[inline(always)]
+
     fn inv(self: Fq6, field_nz: NonZero<u256>) -> Fq6 {
         core::internal::revoke_ap_tracking();
         let field_nz = FIELD.try_into().unwrap();
