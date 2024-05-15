@@ -5,6 +5,7 @@ use super::{utils as u, reduce, u512_reduce};
 // unreduced, returns u512 plus u128 (fifth limb) which needs handling
 #[inline(always)]
 fn u512_scl(a: u512, x: u128) -> (u512, u128) {
+
     let u512 { limb0, limb1, limb2, limb3 } = a;
     // (a1 + a2) * c
     let (limb1_part1, limb0) = u128_wide_mul(limb0, x);
@@ -33,6 +34,7 @@ fn scl_u(a: u256, b: u128) -> u512 {
 // returns modded u256
 #[inline(always)]
 fn scl_nz(a: u256, b: u128, modulo: NonZero<u256>) -> u256 {
+    println!("m");
     u512_reduce(scl_u(a, b), modulo)
 }
 
@@ -40,6 +42,7 @@ fn scl_nz(a: u256, b: u128, modulo: NonZero<u256>) -> u256 {
 // returns modded u256
 #[inline(always)]
 fn scl(a: u256, b: u128, modulo: NonZero<u256>) -> u256 {
+
     scl_nz(a, b, modulo.try_into().unwrap())
 }
 
@@ -47,6 +50,7 @@ fn scl(a: u256, b: u128, modulo: NonZero<u256>) -> u256 {
 // unreduced, returns u512
 // #[inline(always)]
 fn mul_u(a: u256, b: u256) -> u512 {
+    println!("m");
     let (limb1, limb0) = u128_wide_mul(a.low, b.low);
     let (limb2, limb1_part) = u128_wide_mul(a.low, b.high);
     let (limb1, limb1_overflow0) = u::u128_add_with_carry(limb1, limb1_part);
@@ -73,6 +77,7 @@ fn mul_u(a: u256, b: u256) -> u512 {
 // returns modded u256
 #[inline(always)]
 fn mul_nz(a: u256, b: u256, modulo: NonZero<u256>) -> u256 {
+    println!("m");
     u512_reduce(mul_u(a, b), modulo)
 }
 
@@ -80,6 +85,7 @@ fn mul_nz(a: u256, b: u256, modulo: NonZero<u256>) -> u256 {
 // returns modded u256
 #[inline(always)]
 fn mul(a: u256, b: u256, modulo: u256) -> u256 {
+    println!("m");
     mul_nz(a, b, modulo.try_into().unwrap())
 }
 
@@ -111,6 +117,7 @@ fn sqr_u(a: u256) -> u512 {
 // returns modded u256
 #[inline(always)]
 fn sqr_nz(a: u256, modulo: NonZero<u256>) -> u256 {
+    println!("m");
     u512_reduce(sqr_u(a), modulo)
 }
 
@@ -119,5 +126,6 @@ fn sqr_nz(a: u256, modulo: NonZero<u256>) -> u256 {
 // returns modded u256
 #[inline(always)]
 fn sqr(a: u256, modulo: u256) -> u256 {
+    println!("m");
     u512_reduce(sqr_u(a), modulo.try_into().unwrap())
 }

@@ -12,7 +12,6 @@ fn neg(b: u256, modulo: u256) -> u256 {
 
 #[inline(always)]
 fn add_u(lhs: u256, rhs: u256) -> u256 implicits(RangeCheck) {
-    println!("m");
     let high = u::expect_u128(u128_overflowing_add(lhs.high, rhs.high), 'u256_add_u Overflow');
     match u128_overflowing_add(lhs.low, rhs.low) {
         Result::Ok(low) => u256 { low, high },

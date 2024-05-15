@@ -3,6 +3,7 @@ use super::{mul_u, mul_nz};
 // Inversion
 #[inline(always)]
 fn inv(b: u256, modulo: NonZero<u256>) -> u256 {
+    println!("m");
     math::u256_inv_mod(b, modulo).expect('inversion failed').into()
 }
 
@@ -21,6 +22,7 @@ fn div_u(a: u256, b: u256, modulo_nz: NonZero<u256>) -> u512 {
 // Division - Easy
 #[inline(always)]
 fn div(a: u256, b: u256, modulo: u256) -> u256 {
+    println!("m");
     let modulo_nz = modulo.try_into().expect('0 modulo');
     div_nz(a, b, modulo_nz)
 }
